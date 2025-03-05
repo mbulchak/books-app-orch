@@ -1,0 +1,34 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "bookName": "Jane Eir",
+      "author": "Benshamin Franklin",
+      "category": "romance",
+      "ISBN": 1234,
+      "createdAt": "12 March 2022, 8:35AM",
+      "modifyAt": "--",
+      "active": true
+    },
+    {
+      "id": 2,
+      "bookName": "Roksolana",
+      "author": "Benshamin Gus",
+      "category": "tradegy",
+      "ISBN": 655,
+      "createdAt": "13 March 2022, 1:48PM",
+      "modifyAt": "13 May 2024, 5:48AM",
+      "active": true
+    },
+    {
+      "id": 3,
+      "bookName": "Kotu",
+      "author": "White",
+      "category": "dog-friendly",
+      "ISBN": 1432,
+      "createdAt": "12 March 2022, 8:35AM",
+      "modifyAt": "--",
+      "active": false
+    }
+  ]
+}

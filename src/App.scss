@@ -1,0 +1,42 @@
+.header {
+  height: 60px;
+  background-color: #ddd;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+
+  height: 100%;
+
+  padding-left: 15px;
+
+  &__link {
+    text-transform: uppercase;
+    color: #282828;
+    font-weight: 700;
+  }
+}
+
+.main {
+  // min-height: 100%;
+  min-height: calc(100vh - 25px - 60px);
+  margin: 15px;
+}
+
+.footer {
+  &__main {
+    position: sticky;
+    bottom: 0;
+
+    padding: 15px;
+    width: 100%;
+
+    background-color: #ddd;
+  }
+
+  &__link {
+    font-size: 20px;
+  }
+}
