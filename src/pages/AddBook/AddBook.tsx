@@ -1,5 +1,6 @@
+import { BookComponent } from '../../components/BookComponent';
 import './AddBook.scss';
 
 export const AddBook = () => {
-  return <p>AddBook</p>
-}
+  return <BookComponent formName="Add" />;
+};

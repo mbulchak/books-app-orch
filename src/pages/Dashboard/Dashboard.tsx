@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import './Dashboard.scss';
 import 'bulma/css/bulma.css';
 import { getBooks } from '../../services/getBooks';
-import { Book } from '../../types/Book';
 import { getFilteredBooks } from '../../utils/getFilteredBooks';
 import { FILTER_BOOK } from '../../types/filterBook';
+import clsx from 'clsx';
+import { Outlet, useNavigate } from 'react-router';
+import { useBooks } from '../../context/BookContext';
+import { deleteBook } from '../../services/deleteBook';
+import { Book } from '../../types/Book';
+import { updateBook } from '../../services/editBook';
 
 export const Dashboard = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [filterRecords, setFilterRecords] = useState<FILTER_BOOK>(FILTER_BOOK.ACTIVE);
+  const { books, setBooks, setSelectedBook } = useBooks();
+
+  const [category, setCategory] = useState<FILTER_BOOK>(FILTER_BOOK.ACTIVE);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getBooks()
@@ -18,25 +25,47 @@ export const Dashboard = () => {
       .catch(console.error);
   }, []);
 
-  console.log('books', books);
-
-  const filteredBooks = getFilteredBooks(books, filterRecords);
+  const filteredBooks = getFilteredBooks(books, category);
   console.log('filteredBooks', filteredBooks);
+
+  const handleEdit = (book: Book) => {
+    setSelectedBook(book);
+    navigate(`/books/${book.id}`);
+  };
+
+  const handleDelete = (bookId: string) => {
+    deleteBook(bookId);
+    setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+  };
+
+  const handleActiveRecord = (book: Book) => {
+    const updatedBook = { ...book, active: !book.active };
+
+    updateBook(updatedBook)
+      .then((resBook) => {
+        setBooks((prevBooks) =>
+          prevBooks.map((book) =>
+            book.id === resBook.id
+              ? {
+                  ...book,
+                  active: resBook.active,
+                }
+              : book,
+          ),
+        );
+      })
+      .catch((error) => {
+        console.error('Failed to update the book', error);
+      });
+  };
 
   return (
     <>
-      <div className="filter-dropdown">
-        <p>Filter by</p>
-        <p>
-          Showing numberOfRecordsWhichAreShowingBasedOnFilterSelecition of totalNumberOfRecordsInDB.
-        </p>
-
-        {/* is-active */}
-
+      <div className="filter__dropdown">
         <div className="select">
           <select
-            value={filterRecords}
-            onChange={(event) => setFilterRecords(event.target.value as FILTER_BOOK)}
+            value={category}
+            onChange={(event) => setCategory(event.target.value as FILTER_BOOK)}
           >
             <option>Show Active</option>
             <option>Show Deactivated</option>
@@ -44,49 +73,36 @@ export const Dashboard = () => {
           </select>
         </div>
 
-        {/* <div className="dropdown ">
-          <div className="dropdown-trigger">
-            <button className="button" aria-haspopup="true" aria-controls="dropdown-menu3">
-              <span>Click me</span>
-            </button>
-          </div>
-
-          <div className="dropdown-menu " id="dropdown-menu3" role="menu">
-            <div className="dropdown-content">
-              <a href="#" className="dropdown-item">
-                Show All
-              </a>
-              <a href="#" className="dropdown-item">
-                Show Active
-              </a>
-              <a href="#" className="dropdown-item">
-                Show Deactivated
-              </a>
-            </div>
-          </div>
-        </div> */}
+        <span>
+          Showing {filteredBooks.length} records out of {books.length} records
+        </span>
       </div>
 
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Book </th>
-            <th>Author</th>
-            <th>Category</th>
-            <th>ISBN</th>
-            <th>Created At</th>
-            <th>Modify At</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+      {filteredBooks?.length > 0 ? (
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Book </th>
+              <th>Author</th>
+              <th>Category</th>
+              <th>ISBN</th>
+              <th>Created At</th>
+              <th>Modify At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {/* className="is-selected" */}
-          {filteredBooks?.length > 0 ? (
-            filteredBooks.map((book) => {
-              const { bookName, author, category, ISBN, createdAt, modifyAt } = book;
+          <tbody>
+            {filteredBooks.map((book) => {
+              const { id, bookName, author, category, ISBN, createdAt, modifyAt, active } = book;
+
               return (
-                <tr>
+                <tr
+                  key={id}
+                  className={clsx({
+                    disactive: !active,
+                  })}
+                >
                   <th>{bookName}</th>
                   <td> {author} </td>
                   <td>{category}</td>
@@ -95,19 +111,37 @@ export const Dashboard = () => {
                   <td>{modifyAt}</td>
 
                   <td className="buttons">
-                    {/* <div>Edit</div> */}
-                    <span className="button is-info">Edit</span>
-                    <span className="button is-info">Delete</span>
-                    <span className="button is-info">Deactivate/Re-Activate</span>
+                    {active ? (
+                      <>
+                        <span className="button is-info" onClick={() => handleEdit(book)}>
+                          Edit
+                        </span>
+                        <span onClick={() => handleActiveRecord(book)} className="button is-info">
+                          Deactivate
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="button is-info">Edit</span>
+                        <span className="button is-info" onClick={() => handleDelete(id)}>
+                          Delete
+                        </span>
+                        <span onClick={() => handleActiveRecord(book)} className="button is-info">
+                          Re-Activate
+                        </span>
+                      </>
+                    )}
                   </td>
                 </tr>
               );
-            })
-          ) : (
-            <p>There are no this record of books</p>
-          )}
-        </tbody>
-      </table>
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <p>There are no record of books</p>
+      )}
+
+      <Outlet />
     </>
   );
 };

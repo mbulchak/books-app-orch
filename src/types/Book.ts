@@ -1,8 +1,11 @@
+import { CategoryBook } from "./CategoryBook";
+
+// id: number;
 export type Book = {
-  id: number;
+  id: string;
   bookName: string;
   author: string;
-  category: string;
+  category: CategoryBook;
   ISBN: number;
   createdAt: string;
   modifyAt: string;
