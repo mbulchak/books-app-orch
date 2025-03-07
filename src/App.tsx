@@ -1,8 +1,10 @@
 import { Outlet } from 'react-router';
 import './App.scss';
 import { NavLink } from 'react-router-dom';
+import { useBooks } from './context/BookContext';
 
 function App() {
+  const { successMessage } = useBooks();
   return (
     <>
       <header className="header">
@@ -20,6 +22,9 @@ function App() {
       <main className="main">
         <Outlet />
       </main>
+
+
+      {successMessage && <div className="success-message">{successMessage}</div>}
 
       <footer className="footer__main">
         <NavLink

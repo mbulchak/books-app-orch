@@ -12,7 +12,7 @@ import { Book } from '../../types/Book';
 import { updateBook } from '../../services/editBook';
 
 export const Dashboard = () => {
-  const { books, setBooks, setSelectedBook } = useBooks();
+  const { books, setBooks, setSelectedBook, setSuccessMessage } = useBooks();
 
   const [category, setCategory] = useState<FILTER_BOOK>(FILTER_BOOK.ACTIVE);
   const navigate = useNavigate();
@@ -26,7 +26,6 @@ export const Dashboard = () => {
   }, []);
 
   const filteredBooks = getFilteredBooks(books, category);
-  console.log('filteredBooks', filteredBooks);
 
   const handleEdit = (book: Book) => {
     setSelectedBook(book);
@@ -36,6 +35,7 @@ export const Dashboard = () => {
   const handleDelete = (bookId: string) => {
     deleteBook(bookId);
     setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+    setSuccessMessage('Book deleted successfully!');
   };
 
   const handleActiveRecord = (book: Book) => {
@@ -57,6 +57,9 @@ export const Dashboard = () => {
       .catch((error) => {
         console.error('Failed to update the book', error);
       });
+
+    setSuccessMessage('Book edited successfully!');
+    setTimeout(() => setSuccessMessage(null), 3000);
   };
 
   return (
@@ -122,7 +125,9 @@ export const Dashboard = () => {
                       </>
                     ) : (
                       <>
-                        <span className="button is-info">Edit</span>
+                        <span className="button is-info" onClick={() => handleEdit(book)}>
+                          Edit
+                        </span>
                         <span className="button is-info" onClick={() => handleDelete(id)}>
                           Delete
                         </span>

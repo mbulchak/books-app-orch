@@ -3,14 +3,6 @@ const BASE_URL = 'http://localhost:5000';
 function request<T>(url: string, method = 'GET', data: any = null): Promise<T> {
   const options: RequestInit = { method };
 
-  /* if (data && (method === 'PATCH' || method === 'POST')) {
-    // Ensure 'id' is a number
-    if (data.id) {
-      data.id = Number(data.id); 
-    }
-  }
- */
-
   if (data !== undefined && method !== 'GET' && method !== 'HEAD') {
     options.body = JSON.stringify(data);
     options.headers = {

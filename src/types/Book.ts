@@ -1,6 +1,5 @@
 import { CategoryBook } from "./CategoryBook";
 
-// id: number;
 export type Book = {
   id: string;
   bookName: string;

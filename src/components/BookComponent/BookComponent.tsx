@@ -7,13 +7,17 @@ import { useBooks } from '../../context/BookContext';
 import moment from 'moment';
 import { useLocation, useNavigate } from 'react-router';
 import { updateBook } from '../../services/editBook';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   formName: string;
 };
 
 export const BookComponent: React.FC<Props> = ({ formName }) => {
+  const [errorBookName, setErrorBookName] = useState<string>('');
+  const [errorAuthorName, setErrorAuthorName] = useState<string>('');
+  const [errorCategory, setErrorCategory] = useState<string>('');
+
   const location = useLocation();
   const navigate = useNavigate();
   const createdAt = moment().format('D MMMM YYYY[,] LT');
@@ -30,6 +34,8 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
     setIsbn,
     selectedBook,
     setSelectedBook,
+
+    setSuccessMessage,
   } = useBooks();
 
   useEffect(() => {
@@ -50,7 +56,7 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
   const getNextId = (books: Book[]) => {
     if (books.length === 0) return '1';
 
-    const sortedBooks = [...books].sort((book1, book2) => +book2.id - (+book1.id));
+    const sortedBooks = [...books].sort((book1, book2) => +book2.id - +book1.id);
 
     let nextId = +sortedBooks[0].id + 1;
 
@@ -92,6 +98,40 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // start validation
+
+    if (!bookName) {
+      setErrorBookName('Please, enter the book name');
+    } else {
+      setErrorBookName('');
+    }
+    if (!authorName) {
+      setErrorAuthorName('Please, enter the author name');
+    } else {
+      setErrorAuthorName('');
+    }
+    if (category === CategoryBook.SELECT) {
+      setErrorCategory('Please, select the book category');
+    } else {
+      setErrorCategory('');
+    }
+
+    if (!bookName || !authorName || category === CategoryBook.SELECT) return;
+
+    // end validation
+
+    if (
+      selectedBook &&
+      selectedBook.bookName === bookName &&
+      selectedBook.author === authorName &&
+      selectedBook.category === category &&
+      selectedBook.ISBN === isbn
+    ) {
+      navigate('/dashboard');
+      return;
+    }
+
     setSelectedBook(null);
 
     if (location.pathname === '/addbook') {
@@ -102,11 +142,15 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
         category,
         ISBN: isbn,
       });
+      setSuccessMessage('Book added successfully!');
     } else {
       if (selectedBook) {
         editSelectedBook(selectedBook);
+        setSuccessMessage('Book updated successfully!');
       }
     }
+
+    setTimeout(() => setSuccessMessage(null), 3000);
 
     navigate('/dashboard');
     handleReset();
@@ -122,7 +166,7 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
   return (
     <>
       <div className="main__form--book">
-        <p>{formName} Book</p>
+        <p className="form__title">{formName} Book</p>
 
         <form onSubmit={handleSubmit} onReset={handleReset} className="form">
           <div className="form__component">
@@ -134,6 +178,7 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
               value={bookName}
               onChange={(event) => setBookName(event.target.value)}
             />
+            {errorBookName && <p className="form__error">{errorBookName}</p>}
           </div>
 
           <div className="form__component">
@@ -145,6 +190,7 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
               value={authorName}
               onChange={(event) => setAuthorName(event.target.value)}
             />
+            {errorAuthorName && <p className="form__error">{errorAuthorName}</p>}
           </div>
 
           <div className="form__component">
@@ -161,6 +207,7 @@ export const BookComponent: React.FC<Props> = ({ formName }) => {
               <option value="biographical">Biographical</option>
               <option value="adventure">Adventure</option>
             </select>
+            {errorCategory && <p className="form__error">{errorCategory}</p>}
           </div>
 
           <div className="form__component">

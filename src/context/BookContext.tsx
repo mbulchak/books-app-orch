@@ -15,6 +15,8 @@ interface BookContextType {
   setIsbn: React.Dispatch<React.SetStateAction<number>>;
   selectedBook: Book | null;
   setSelectedBook: React.Dispatch<React.SetStateAction<Book | null>>;
+  successMessage: string | null;
+  setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
@@ -23,12 +25,11 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
   const [books, setBooks] = useState<Book[]>([]);
 
   const [bookName, setBookName] = useState<string>('');
-  // const [errorBookName, setErrorBookName] = useState<string>('');
-
   const [authorName, setAuthorName] = useState<string>('');
   const [category, setCategory] = useState<CategoryBook>(CategoryBook.SELECT);
   const [isbn, setIsbn] = useState<number>(5455);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const value = {
     books,
@@ -43,6 +44,8 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
     setIsbn,
     selectedBook,
     setSelectedBook,
+    successMessage,
+    setSuccessMessage,
   };
 
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
