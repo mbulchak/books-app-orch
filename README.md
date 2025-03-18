@@ -20,7 +20,7 @@ npx json-server --watch db.json --port 5000
 ```
 - open another terminal to run the application
 ```js
-npx run dev
+npm run dev
 ```
 - click on the link in the terminal
 
