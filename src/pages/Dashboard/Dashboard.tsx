@@ -36,6 +36,7 @@ export const Dashboard = () => {
     deleteBook(bookId);
     setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
     setSuccessMessage('Book deleted successfully!');
+    setTimeout(() => setSuccessMessage(null), 3000);
   };
 
   const handleActiveRecord = (book: Book) => {

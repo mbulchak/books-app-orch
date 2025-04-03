@@ -17,6 +17,13 @@
     color: #282828;
     font-weight: 700;
   }
+
+  &__link--active {
+    padding: 5px;
+    border-radius: 5px;
+    color: #dcdbdb;
+    background-color: #727070;
+  }
 }
 
 .main {

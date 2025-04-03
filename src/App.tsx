@@ -1,19 +1,29 @@
-import { Outlet } from 'react-router';
+import { NavLinkRenderProps, Outlet, useNavigate } from 'react-router';
 import './App.scss';
 import { NavLink } from 'react-router-dom';
 import { useBooks } from './context/BookContext';
+import { useEffect } from 'react';
 
 function App() {
   const { successMessage } = useBooks();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/dashboard');
+  }, []);
+
+  const activeLink = ({ isActive }: NavLinkRenderProps) =>
+    isActive ? 'nav__link--active' : 'nav__link';
+
   return (
     <>
       <header className="header">
         <nav className="nav">
-          <NavLink className="nav__link" to="/dashboard">
+          <NavLink className={activeLink} to="/dashboard">
             Dashboard
           </NavLink>
 
-          <NavLink className="nav__link" to="/addbook">
+          <NavLink className={activeLink} to="/addbook">
             Add Book
           </NavLink>
         </nav>
@@ -22,7 +32,6 @@ function App() {
       <main className="main">
         <Outlet />
       </main>
-
 
       {successMessage && <div className="success-message">{successMessage}</div>}
 

@@ -4,10 +4,10 @@
       "id": "7",
       "bookName": "Robin Hood",
       "author": "Jull Wern",
-      "category": "adventure",
+      "category": "biographical",
       "ISBN": 54556,
       "createdAt": "7 March 2025, 9:48 AM",
-      "modifyAt": "7 March 2025, 1:31 PM",
+      "modifyAt": "3 April 2025, 2:09 PM",
       "active": true
     },
     {
@@ -28,36 +28,26 @@
       "ISBN": 5455,
       "createdAt": "7 March 2025, 10:11 AM",
       "modifyAt": "--",
-      "active": true
-    },
-    {
-      "id": "14",
-      "bookName": "Jiso Song",
-      "author": "JSP company",
-      "category": "biographical",
-      "ISBN": 5455,
-      "createdAt": "7 March 2025, 10:15 AM",
-      "modifyAt": "7 March 2025, 1:28 PM",
       "active": false
     },
     {
       "id": "15",
-      "bookName": "Jiso Bls",
-      "author": "JSP",
-      "category": "biographical",
-      "ISBN": 5455,
+      "bookName": "Lorem Child",
+      "author": "bin Kioo",
+      "category": "romance",
+      "ISBN": 5458,
       "createdAt": "7 March 2025, 11:52 AM",
-      "modifyAt": "7 March 2025, 12:12 PM",
-      "active": true
+      "modifyAt": "3 April 2025, 1:45 PM",
+      "active": false
     },
     {
       "id": "16",
       "bookName": "Company",
       "author": "Hill Saga",
-      "category": "romance",
+      "category": "biographical",
       "ISBN": 22354,
       "createdAt": "7 March 2025, 11:55 AM",
-      "modifyAt": "7 March 2025, 1:38 PM",
+      "modifyAt": "3 April 2025, 2:08 PM",
       "active": true
     },
     {
@@ -68,7 +58,7 @@
       "ISBN": 5455,
       "createdAt": "7 March 2025, 12:12 PM",
       "modifyAt": "7 March 2025, 12:12 PM",
-      "active": false
+      "active": true
     },
     {
       "id": "19",
@@ -88,7 +78,7 @@
       "ISBN": 5455,
       "createdAt": "7 March 2025, 1:27 PM",
       "modifyAt": "--",
-      "active": true
+      "active": false
     }
   ]
 }
